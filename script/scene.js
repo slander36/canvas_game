@@ -10,11 +10,13 @@ fsg.scene = function() {
 	                    "images/winter_overlay.png",
 	                    null];
 	
+	this.collisionmap = [];
+	
 	this.init = function() {
 		this.bgImage = new Image();
 		this.bgImage.bgReady = false;
 		this.bgImage.onload = function() {
-			this.bgReady = true;;
+			this.bgReady = true;
 		};
 		
 		this.overlayImage = new Image();
@@ -23,7 +25,7 @@ fsg.scene = function() {
 			this.overlayReady = true;
 		};
 		
-		this.id = 0;
+		this.id = -1;
 	};
 	
 	this.loadBackground = function(bg) {
@@ -38,8 +40,13 @@ fsg.scene = function() {
 		if(this.id < this.backgroundList.length - 1) {
 			this.id++;
 			this.loadBackground(this.backgroundList[this.id]);
-			// this.loadOverlay(this.overlayList[this.id]);
+			this.collisionmap = fsg.scenelist[this.id];
 		}
+	};
+	
+	this.getBlockType = function(x, y) {
+		var index = x + y*20;
+		return this.collisionmap[index];
 	};
 	
 };

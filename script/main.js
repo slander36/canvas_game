@@ -51,6 +51,7 @@ fsg.main = function() {
 		var delta = now - then;
 		game.update(delta/1000, keysDown, mouse, mousePos);
 		game.render();
+		ctx.fillText("FPS: "+(1000/delta).toFixed(2), 32, 32);
 		then = now;
 	}, 1);
 	
