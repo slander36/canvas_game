@@ -1,6 +1,9 @@
 fsg.scene = function() {
 	
-	this.init = function() {
+	this.init = function(canvas) {
+		
+		this.dx = canvas.width/32;
+		this.dy = canvas.height/32;
 		
 		this.drawmap = [];
 		
@@ -31,7 +34,7 @@ fsg.scene = function() {
 	};
 	
 	this.getBlockType = function(x, y) {
-		var index = x + y*20;
+		var index = x + y*this.dx;
 		return this.collisionmap[this.drawmap[index]];
 	};
 	

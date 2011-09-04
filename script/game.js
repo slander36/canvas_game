@@ -9,7 +9,7 @@ fsg.game = function() {
 		// Add initial scene
 		
 		this.scene = new fsg.scene();
-		this.scene.init();
+		this.scene.init(this.canvas);
 		
 		// Add actors now
 		
@@ -37,14 +37,16 @@ fsg.game = function() {
 		this.levelLabel = new fsg.actor();
 		this.levelLabel.init(this.scene);
 		this.levelLabel.loadImage('images/levellabel.png');
-		this.levelLabel.x = (this.canvas.width/2)-64;
+		this.levelLabel.x = (this.canvas.width)-128;
 		this.levelLabel.y = 0;
 		
+		/*
 		this.skipSceneButton = new fsg.actor();
 		this.skipSceneButton.init(this.scene);
 		this.skipSceneButton.loadImage('images/skiplevelbutton.png');
 		this.skipSceneButton.x = this.canvas.width-128;
 		this.skipSceneButton.y = 0;
+		*/
 		
 		this.pauseButton = new fsg.actor();
 		this.pauseButton.init(this.scene);
@@ -151,7 +153,7 @@ fsg.game = function() {
 	this.render = function() {
 		
 		for (i in this.scene.drawmap) {
-			this.ctx.drawImage(this.scene.tilemap[this.scene.drawmap[i]],i%20*32,Math.floor(i/20)*32);
+			this.ctx.drawImage(this.scene.tilemap[this.scene.drawmap[i]],i%this.scene.dx*32,Math.floor(i/this.scene.dx)*32);
 		}
 		
 		if (this.player.actorImage.actorReady) {
@@ -164,15 +166,27 @@ fsg.game = function() {
 		
 		if (this.lifeLabel.actorImage.actorReady) {
 			this.ctx.drawImage(this.lifeLabel.actorImage, this.lifeLabel.x, this.lifeLabel.y);
+			this.ctx.fillStyle = "rgb(250,250,250)";
+			this.ctx.font = "bold 20px Courier New";
+			this.ctx.textAlign = "left";
+			this.ctx.textBaseline = "top";
+			this.ctx.fillText(this.player.health, 64+16, 6);
 		}
 		
 		if (this.levelLabel.actorImage.actorReady) {
 			this.ctx.drawImage(this.levelLabel.actorImage, this.levelLabel.x, this.levelLabel.y);
+			this.ctx.fillStyle = "rgb(250,250,250)";
+			this.ctx.font = "bold 20px Courier New";
+			this.ctx.textAlign = "center";
+			this.ctx.textBaseline = "top";
+			this.ctx.fillText((this.scene.id+1),(this.canvas.width)-32,6);
 		}
 		
+		/*
 		if (this.skipSceneButton.actorImage.actorReady) {
 			this.ctx.drawImage(this.skipSceneButton.actorImage, this.skipSceneButton.x, this.skipSceneButton.y);
 		}
+		*/
 		
 		if (this.pauseButton.actorImage.actorReady) {
 			this.ctx.drawImage(this.pauseButton.actorImage, this.pauseButton.x, this.pauseButton.y);
@@ -182,23 +196,11 @@ fsg.game = function() {
 			this.ctx.drawImage(this.gamepad.actorImage, this.gamepad.x, this.gamepad.y);
 		}
 		
-		this.ctx.fillStyle = "rgb(250,250,250)";
-		this.ctx.font = "bold 20px Courier New";
-		this.ctx.textAlign = "center";
-		this.ctx.textBaseline = "top";
-		this.ctx.fillText((this.scene.id+1),(this.canvas.width/2)+32,6);
-		
 //		this.ctx.fillStyle = "rgb(250,250,250)";
 //		this.ctx.font = "18px Helvetica";
 //		this.ctx.textAlign = "left";
 //		this.ctx.textBaseline = "top";
 //		this.ctx.fillText("0: " + this.player.moveQueue[0], 640-128-96, 0);
-		
-		this.ctx.fillStyle = "rgb(250,250,250)";
-		this.ctx.font = "bold 20px Courier New";
-		this.ctx.textAlign = "left";
-		this.ctx.textBaseline = "top";
-		this.ctx.fillText(this.player.health, 64+16, 6);
 		
 		if(this.isPaused) {
 			this.ctx.drawImage(this.paused.actorImage, this.paused.x, this.paused.y);
