@@ -16,5 +16,10 @@ fsg.monsterlist[1] =
 		start:	[3,5],
 		image:	"images/troll.png",
 		name:	"Troll"
-	} 
+	},
+	{
+		start:	[8,11],
+		image:	"images/troll.png",
+		name:	"Troll"
+	}
 	];
