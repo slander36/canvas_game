@@ -1,5 +1,6 @@
 fsg.scene = function() {
 	
+	/*
 	this.backgroundList = ["images/intro.png",
 	                       "images/fall.png",
 	                       "images/winter.png",
@@ -9,37 +10,42 @@ fsg.scene = function() {
 	                    null,
 	                    "images/winter_overlay.png",
 	                    null];
-	
-	this.collisionmap = [];
+	*/
 	
 	this.init = function() {
+		/*
 		this.bgImage = new Image();
 		this.bgImage.bgReady = false;
 		this.bgImage.onload = function() {
 			this.bgReady = true;
 		};
+		*/
 		
-		this.overlayImage = new Image();
-		this.overlayImage.overlayReady = false;
-		this.overlayImage.onload = function() {
-			this.overlayReady = true;
-		};
+		this.collisionmap = [];
+		
+		this.tilemap = [];
+		for(i in fsg.tilelist) {
+			var tile = new Image();
+			tile.imgReady = false;
+			tile.onload = function() {
+				this.imgReady = true;
+			};
+			tile.src = fsg.tilelist[i];
+			this.tilemap[i] = tile;
+		}
 		
 		this.id = -1;
 	};
-	
+	/*
 	this.loadBackground = function(bg) {
 		this.bgImage.src = bg;
 	};
-	
-	this.loadOverlay = function(overlay) {
-		this.overlayImage.src = overlay;
-	};
+	*/
 	
 	this.getNextScene = function() {
-		if(this.id < this.backgroundList.length - 1) {
+		if(this.id < fsg.scenelist.length - 1) {
 			this.id++;
-			this.loadBackground(this.backgroundList[this.id]);
+			//this.loadBackground(this.backgroundList[this.id]);
 			this.collisionmap = fsg.scenelist[this.id];
 		}
 	};

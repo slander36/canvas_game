@@ -81,9 +81,15 @@ fsg.game = function() {
 	};
 
 	this.render = function() {
+		/*
 		if (this.scene.bgImage.bgReady) {
 			this.ctx.drawImage(this.scene.bgImage, 0, 0, this.canvas.width, this.canvas.height);
 		};
+		*/
+		
+		for(i in this.scene.collisionmap) {
+			this.ctx.drawImage(this.scene.tilemap[this.scene.collisionmap[i]],i%20*32,Math.floor(i/20)*32);
+		}
 		
 		if (this.player.actorImage.actorReady) {
 			this.ctx.drawImage(this.player.actorImage, this.player.x, this.player.y);
@@ -93,9 +99,11 @@ fsg.game = function() {
 			this.ctx.drawImage(this.monster.actorImage, this.monster.x, this.monster.y);
 		};
 		
+		/*
 		if(this.scene.overlayImage.overlayReady) {
 			this.ctx.drawImage(this.scene.overlayImage, 0, 0);
 		};
+		*/
 		
 		/*
 		this.ctx.fillStyle = "rgb(200,200,200)";
