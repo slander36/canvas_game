@@ -11,6 +11,8 @@ fsg.main = function() {
 	
 	var keysDown = {};
 	
+	var paused = false;
+	
 	addEventListener("keydown", function(e) {
 		keysDown[e.keyCode] = true;
 	}, false);
@@ -19,24 +21,19 @@ fsg.main = function() {
 		delete keysDown[e.keyCode];
 	}, false);
 	
-	var mousePos = [];
-	var mouse = false;
+	var skipScene = false;
 	
 	addEventListener("mousedown", function(e) {
-		mouse = true;
-	});
-	
-	addEventListener("mouseup", function(e) {
-		mouse = false;
-	});
-	
-	addEventListener("mousemove", function(e) {
-		if(mouse && 0 < e.pageX && e.pageX < canvas.width && 0 < e.pageY && e.pageY < canvas.height) {
-			mousePos[0] = e.pageX;
-			mousePos[1] = e.pageY;
-			mouse = true;
-		} else {
-			mouse = false;
+		if((e.pageX > (640-96) && e.pageX < 640)
+				&& (e.pageY < 64 && e.pageY > 0)) {
+			skipScene = true;
+		}
+		if((e.pageX > (640-64) && e.pageX < 640 )
+				&& (e.pageY > (480-32) && e.pageY < 480)) {
+			if(paused == true)
+				paused = false;
+			else
+				paused = true;
 		}
 	});
 	
@@ -44,14 +41,22 @@ fsg.main = function() {
 	
 	game.init(canvas, ctx);
 	var then = Date.now();
-	game.reloadScene();
+	game.nextScene();
 	
 	setInterval(function() {
 		var now = Date.now();
 		var delta = now - then;
-		game.update(delta/1000, keysDown, mouse, mousePos);
+		game.update(paused, delta/1000, keysDown, skipScene);
+		skipScene = false;
 		game.render();
+		
+		// FPS
+		ctx.fillStyle = "rgb(200,200,200)";
+		ctx.font = "18px Helvetica";
+		ctx.textAlign = "left";
+		ctx.textBaseline = "top";
 		ctx.fillText("FPS: "+(1000/delta).toFixed(2), 32, 32);
+		
 		then = now;
 	}, 1);
 	

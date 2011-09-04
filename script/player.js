@@ -10,38 +10,15 @@ fsg.player = function() {
 		this.y = this.cy*32;
 		
 		this.name = "Player 1";
-		
-		// movement queue & timer for smooth movements
+	};
+	
+	player.reset = function() {
+		this.cx = 1;
+		this.cy = 1;
+		this.x = this.cx*32;
+		this.y = this.cy*32;
 		this.moveQueue = [];
 		this.moveTimer = 0;
-	};
-	
-	player.moveUp = function() {
-		if(this.scene.getBlockType(this.cx,this.cy-1) == 1 && this.moveQueue.length == 0)
-			this.moveQueue.push('up');
-//		else if(this.scene.getBlockType(this.cx,this.cy-2) == 1 && this.moveQueue.length == 1)
-//			this.moveQueue.push('up');
-	};
-	
-	player.moveDown = function() {
-		if(this.scene.getBlockType(this.cx,this.cy+1) == 1 && this.moveQueue.length == 0)
-			this.moveQueue.push('down');
-//		else if(this.scene.getBlockType(this.cx,this.cy+2) == 1 && this.moveQueue.length == 1)
-//			this.moveQueue.push('down');
-	};
-	
-	player.moveLeft = function() {
-		if(this.scene.getBlockType(this.cx-1,this.cy) == 1 && this.moveQueue.length == 0)
-			this.moveQueue.push('left');
-//		else if(this.scene.getBlockType(this.cx-2,this.cy) == 1 && this.moveQueue.length == 1)
-//			this.moveQueue.push('left');
-	};
-	
-	player.moveRight = function() {
-		if(this.scene.getBlockType(this.cx+1,this.cy) == 1 && this.moveQueue.length == 0)
-			this.moveQueue.push('right');
-//		else if(this.scene.getBlockType(this.cx+2,this.cy) == 1 && this.moveQueue.length  == 1)
-//			this.moveQueue.push('right');
 	};
 	
 	player.move = function(modifier) {

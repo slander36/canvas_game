@@ -1,6 +1,7 @@
 fsg.game = function() {
 
 	this.init = function(canvas, ctx) {
+		
 		// Add render devices
 		this.canvas = canvas;
 		this.ctx = ctx;
@@ -9,7 +10,6 @@ fsg.game = function() {
 		
 		this.scene = new fsg.scene();
 		this.scene.init();
-		this.scene.getNextScene();
 		
 		// Add actors now
 		
@@ -18,13 +18,33 @@ fsg.game = function() {
 		this.player.loadImage('images/hero.png');
 		this.playerScore = 0;
 		
-		this.monster = new fsg.monster();
-		this.monster.init(this.scene);
-		this.monster.loadImage('images/monster.png');
+		this.monsters = [];
+		
+		this.isPaused = false;
+		
+		this.paused = new fsg.actor();
+		this.paused.init(this.scene);
+		this.paused.loadImage('images/paused.png');
+		this.paused.x = 320-48;
+		this.paused.y = 240-16;
 		
 	};
 	
-	this.update = function(modifier, keysDown, mouse, mousePos) {
+	this.update = function(paused, modifier, keysDown, skipScene) {
+		
+		this.isPaused = paused;
+		
+		if(this.isPaused == true) return;
+		
+		if(skipScene) {
+			this.nextScene();
+			return;
+		}
+		
+		if(this.scene.getBlockType(this.player.cx,this.player.cy) == 99) {
+			this.nextScene();
+			return;
+		}
 		
 		if (38 in keysDown)
 			this.player.moveUp();
@@ -37,87 +57,101 @@ fsg.game = function() {
 		
 		this.player.move(modifier);
 		
-		/* Replacing with above code
-		var speed = this.player.speed * modifier;
-		if (38 in keysDown || ( mouse && (mousePos[1] < (this.player.y + 16)))) { // Player holding up
-			//this.player.y = ((this.player.y - speed - 32) > 0 ? (this.player.y - speed) : 32);
+		for(i in this.monsters) {
+			if (
+					   this.player.x 	 <= (this.monsters[i].x + 32)
+					&& this.monsters[i].x <= (this.player.x + 32)
+					&& this.player.y 	 <= (this.monsters[i].y + 32)
+					&& this.monsters[i].y <= (this.player.y + 32)
+				) {
+				this.reloadScene();
+				return;
+			}
+			this.monsters[i].move(modifier);
 		}
-		if (40 in keysDown || ( mouse && (mousePos[1] > (this.player.y + 16)))) { // Player holding down
-			//this.player.y = ((this.player.y + speed + 64) < this.canvas.height ? (this.player.y + speed) : this.canvas.height - 64);
-		}
-		if (37 in keysDown || ( mouse && (mousePos[0] < (this.player.x + 16)))) { // Player holding left
-			//this.player.x = ((this.player.x - speed - 32) > 0 ? (this.player.x - speed) : 32);
-		}
-		if (39 in keysDown || ( mouse && (mousePos[0] > (this.player.x + 16)))) { // Player holding right
-			//this.player.x = ((this.player.x + speed + 64) < this.canvas.width ? (this.player.x + speed) : this.canvas.width - 64);
-		}
-		*/
+	};
+	
+	this.reloadScene = function() {
+		this.player.reset();
+		this.player.health -= 10;
 		
-		/* Removing for now
-
-		// Are they touching?
-		if (
-			   this.player.x*32 <= (this.monster.x + 32)
-			&& this.monster.x*32 <= (this.player.x + 32)
-			&& this.player.y*32 <= (this.monster.y + 32)
-			&& this.monster.y*32 <= (this.player.y + 32)
-		) {
-			++this.playerScore;
-			this.reloadScene();
-		}
+		this.monsters = [];
 		
-		*/
+		for(i in this.scene.monsterlist) {
+			var args = this.scene.monsterlist[i];
+			var monster = new fsg.monster();
+			monster.init(this.scene);
+			monster.setName(args.name);
+			monster.loadImage(args.image);
+			monster.setLocation(args.start[0],args.start[1]);
+			this.monsters.push(monster);
+		}
 	};
 
-	this.reloadScene = function() {
-		// Check scene
-		if (this.playerScore > 1 && this.playerScore % 3 == 0) {
-			this.scene.getNextScene();
-		}
+	this.nextScene = function() {
 		
-		// Throw the monster somewhere on the screen randomly
-		this.monster.x = 32 + (Math.random() * (this.canvas.width - 32*3));
-		this.monster.y = 32 + (Math.random() * (this.canvas.height - 32*3));
+		this.scene.getNextScene();
+		this.player.reset();
+		
+		this.monsters = [];
+		
+		for(i in this.scene.monsterlist) {
+			var args = this.scene.monsterlist[i];
+			var monster = new fsg.monster();
+			monster.init(this.scene);
+			monster.setName(args.name);
+			monster.loadImage(args.image);
+			monster.setLocation(args.start[0],args.start[1]);
+			this.monsters.push(monster);
+		}
 	};
 
 	this.render = function() {
-		/*
-		if (this.scene.bgImage.bgReady) {
-			this.ctx.drawImage(this.scene.bgImage, 0, 0, this.canvas.width, this.canvas.height);
-		};
-		*/
 		
-		for(i in this.scene.collisionmap) {
-			this.ctx.drawImage(this.scene.tilemap[this.scene.collisionmap[i]],i%20*32,Math.floor(i/20)*32);
+		for(i in this.scene.drawmap) {
+			this.ctx.drawImage(this.scene.tilemap[this.scene.drawmap[i]],i%20*32,Math.floor(i/20)*32);
 		}
 		
 		if (this.player.actorImage.actorReady) {
 			this.ctx.drawImage(this.player.actorImage, this.player.x, this.player.y);
 		};
 		
-		if (this.monster.actorImage.actorReady) {
-			this.ctx.drawImage(this.monster.actorImage, this.monster.x, this.monster.y);
-		};
+		for(i in this.monsters) {
+			this.ctx.drawImage(this.monsters[i].actorImage,this.monsters[i].x,this.monsters[i].y);
+		}
 		
-		/*
-		if(this.scene.overlayImage.overlayReady) {
-			this.ctx.drawImage(this.scene.overlayImage, 0, 0);
-		};
-		*/
-		
-		/*
-		this.ctx.fillStyle = "rgb(200,200,200)";
+		this.ctx.fillStyle = "rgb(250,250,250)";
 		this.ctx.font = "24px Helvetica";
 		this.ctx.textAlign = "left";
 		this.ctx.textBaseline = "top";
-		this.ctx.fillText("Goblins Caught: " + this.playerScore, 32, 32);
-		*/
+		this.ctx.fillText("Level: " + (this.scene.id+1),0,480-32);
 		
 		this.ctx.fillStyle = "rgb(200,200,200)";
 		this.ctx.font = "18px Helvetica";
 		this.ctx.textAlign = "left";
 		this.ctx.textBaseline = "top";
 		this.ctx.fillText("0: " + this.player.moveQueue[0], 640-128, 32);
-//		this.ctx.fillText("1: "+this.player.moveQueue[1], 640-128, 64);
+		
+		this.ctx.fillStyle = "rgb(200,200,200)";
+		this.ctx.font = "18px Helvetica";
+		this.ctx.textAlign = "left";
+		this.ctx.textBaseline = "top";
+		this.ctx.fillText("Life: " + this.player.health, 32, 64);
+
+		this.ctx.fillStyle = "rgb(200,200,200)";
+		this.ctx.font = "18px Helvetica";
+		this.ctx.textAlign = "left";
+		this.ctx.textBaseline = "top";
+		this.ctx.fillText("Skip Scene", 640-96, 0);
+
+		this.ctx.fillStyle = "rgb(200,200,200)";
+		this.ctx.font = "18px Helvetica";
+		this.ctx.textAlign = "left";
+		this.ctx.textBaseline = "top";
+		this.ctx.fillText("Pause", 640-64, 480-32);
+		
+		if(this.isPaused) {
+			this.ctx.drawImage(this.paused.actorImage, this.paused.x, this.paused.y);
+		}
 	};
 };
