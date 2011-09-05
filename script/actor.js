@@ -5,7 +5,7 @@ fsg.actor = function() {
 		// basics
 		this.name = "Actor";
 		this.health = 100;
-		this.speed = 256;
+		this.speed = 160;
 		this.cx = 0;
 		this.cy = 0;
 		this.x = 0;

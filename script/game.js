@@ -16,6 +16,7 @@ fsg.game = function() {
 		this.player = new fsg.player();
 		this.player.init(this.scene);
 		this.player.loadImage('images/hero.png');
+		
 		this.playerScore = 0;
 		
 		this.monsters = [];
@@ -136,7 +137,12 @@ fsg.game = function() {
 					&& this.player.y 	 <= (this.monsters[i].y + 32)
 					&& this.monsters[i].y <= (this.player.y + 32)
 				) {
-				this.reloadScene();
+				this.player.health -= 10;
+				if(this.player.health <= 0) {
+					this.gameOver();
+				} else {
+					this.reloadScene();
+				}
 				return;
 			}
 			this.monsters[i].move(modifier);
@@ -144,8 +150,35 @@ fsg.game = function() {
 	};
 	
 	this.reloadScene = function() {
+		this.player.resetPosition();
+		
+		this.monsters = [];
+		
+		for(i in this.scene.monsterlist) {
+			var args = this.scene.monsterlist[i];
+			var monster = new fsg.monster();
+			monster.init(this.scene);
+			monster.setName(args.name);
+			monster.loadImage(args.image);
+			monster.setLocation(args.start[0],args.start[1]);
+			this.monsters.push(monster);
+		}
+	};
+	
+	this.gameOver = function() {
+		// Add Game Over label
+		// and Restart? button
+		
+		if(true) {
+			this.restartGame();
+		}
+	};
+	
+	this.restartGame = function() {
+		this.scene.reset();
+		this.scene.getNextScene();
+		
 		this.player.reset();
-		this.player.health -= 10;
 		
 		this.monsters = [];
 		
@@ -163,7 +196,7 @@ fsg.game = function() {
 	this.nextScene = function() {
 		
 		this.scene.getNextScene();
-		this.player.reset();
+		this.player.resetPosition();
 		
 		this.monsters = [];
 		

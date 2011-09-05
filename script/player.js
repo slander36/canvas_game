@@ -12,13 +12,19 @@ fsg.player = function() {
 		this.name = "Player 1";
 	};
 	
-	player.reset = function() {
+	player.resetPosition = function() {
 		this.cx = 1;
 		this.cy = 1;
 		this.x = this.cx*32;
 		this.y = this.cy*32;
 		this.moveQueue = [];
 		this.moveTimer = 0;
+	};
+	
+	player.reset = function() {
+		this.initFollowUp();
+		this.resetPosition();
+		this.health = 100;
 	};
 	
 	player.move = function(modifier) {

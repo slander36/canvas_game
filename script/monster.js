@@ -3,7 +3,7 @@ fsg.monster = function() {
 	var monster = new fsg.actor();
 	
 	monster.initFollowUp = function() {
-		this.speed = 128;
+		this.speed = 64;
 	};
 	
 	monster.setName = function(name) {
@@ -19,21 +19,24 @@ fsg.monster = function() {
 	
 	monster.move = function(modifier) {
 		if(this.moveQueue.length == 0) {
-			var random = Math.floor((Math.random()*100)) % 4;
-			switch(random) {
-				case 0:
-					this.moveUp();
-					break;
-				case 1:
-					this.moveRight();
-					break;
-				case 2:
-					this.moveDown();
-					break;
-				case 3:
-					this.moveLeft();
-					break;
-			};
+			var random = Math.floor(Math.random()*100) % (8 * Math.floor(1000*modifier));
+			if(random == 0) {
+				var direction = Math.floor((Math.random()*100)) % 4;
+					switch(direction) {
+						case 0:
+							this.moveUp();
+							break;
+						case 1:
+							this.moveRight();
+							break;
+						case 2:
+							this.moveDown();
+							break;
+						case 3:
+							this.moveLeft();
+							break;
+					};
+			}
 		} else {
 			var speed = this.speed*modifier;
 			switch(this.moveQueue[this.moveQueue.length-1]) {

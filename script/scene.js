@@ -5,6 +5,8 @@ fsg.scene = function() {
 		this.dx = canvas.width/32;
 		this.dy = canvas.height/32;
 		
+		this.sceneCount = fsg.scenelist.length;
+		
 		this.drawmap = [];
 		
 		this.tilemap = [];
@@ -26,11 +28,15 @@ fsg.scene = function() {
 	};
 	
 	this.getNextScene = function() {
-		if(this.id < fsg.scenelist.length - 1) {
+//		if(this.id < fsg.scenelist.length - 1) {
 			this.id++;
-			this.drawmap = fsg.scenelist[this.id];
-			this.monsterlist = fsg.monsterlist[this.id];
-		}
+			this.drawmap = fsg.scenelist[this.id % this.sceneCount];
+			this.monsterlist = fsg.monsterlist[this.id % this.sceneCount];
+//		}
+	};
+	
+	this.reset = function() {
+		this.id = -1;
 	};
 	
 	this.getBlockType = function(x, y) {
