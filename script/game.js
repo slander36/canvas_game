@@ -54,11 +54,39 @@ fsg.game = function() {
 		this.pauseButton.x = this.canvas.width-128;
 		this.pauseButton.y = this.canvas.height-32;
 		
-		this.gamepad = new fsg.actor();
-		this.gamepad.init(this.scene);
-		this.gamepad.loadImage('images/gamepad.png');
-		this.gamepad.x = 0;
-		this.gamepad.y = this.canvas.height-96;
+		this.gamepad = {};
+		
+		this.gamepad.main = new fsg.actor();
+		this.gamepad.main.init(this.scene);
+		this.gamepad.main.loadImage('images/gamepad.png');
+		this.gamepad.main.x = 0;
+		this.gamepad.main.y = this.canvas.height-96;
+		
+		this.gamepad.up = new fsg.actor();
+		this.gamepad.up.init(this.scene);
+		this.gamepad.up.loadImage('images/gamepadup.png');
+		this.gamepad.up.x = 0;
+		this.gamepad.up.y = this.canvas.height-96;
+		
+		this.gamepad.down = new fsg.actor();
+		this.gamepad.down.init(this.scene);
+		this.gamepad.down.loadImage('images/gamepaddown.png');
+		this.gamepad.down.x = 0;
+		this.gamepad.down.y = this.canvas.height-96;
+		
+		this.gamepad.left = new fsg.actor();
+		this.gamepad.left.init(this.scene);
+		this.gamepad.left.loadImage('images/gamepadleft.png');
+		this.gamepad.left.x = 0;
+		this.gamepad.left.y = this.canvas.height-96;
+		
+		this.gamepad.right = new fsg.actor();
+		this.gamepad.right.init(this.scene);
+		this.gamepad.right.loadImage('images/gamepadright.png');
+		this.gamepad.right.x = 0;
+		this.gamepad.right.y = this.canvas.height-96;
+		
+		this.gamepad.current = this.gamepad.main;
 		
 	};
 	
@@ -80,23 +108,23 @@ fsg.game = function() {
 		
 		var keyDown = keysDown[keysDown.length-1];
 		
-		this.gamepad.loadImage('images/gamepad.png');
+		this.gamepad.current = this.gamepad.main;
 		
 		if (38 == keyDown || gamepad == "up") {
 			this.player.moveUp();
-			this.gamepad.loadImage('images/gamepadup.png');
+			this.gamepad.current = this.gamepad.up
 		}
 		if (40 == keyDown || gamepad == "down") {
 			this.player.moveDown();
-			this.gamepad.loadImage('images/gamepaddown.png');
+			this.gamepad.current = this.gamepad.down;
 		}
 		if(37 == keyDown || gamepad == "left") {
 			this.player.moveLeft();
-			this.gamepad.loadImage('images/gamepadleft.png');
+			this.gamepad.current = this.gamepad.left;
 		}
 		if(39 == keyDown || gamepad == "right") {
 			this.player.moveRight();
-			this.gamepad.loadImage('images/gamepadright.png');
+			this.gamepad.current = this.gamepad.right;
 		}
 		
 		this.player.move(modifier);
@@ -192,8 +220,8 @@ fsg.game = function() {
 			this.ctx.drawImage(this.pauseButton.actorImage, this.pauseButton.x, this.pauseButton.y);
 		}
 		
-		if (this.gamepad.actorImage.actorReady) {
-			this.ctx.drawImage(this.gamepad.actorImage, this.gamepad.x, this.gamepad.y);
+		if (this.gamepad.current.actorImage.actorReady) {
+			this.ctx.drawImage(this.gamepad.current.actorImage, this.gamepad.current.x, this.gamepad.current.y);
 		}
 		
 //		this.ctx.fillStyle = "rgb(250,250,250)";

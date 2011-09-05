@@ -66,6 +66,31 @@ fsg.main = function() {
 		}
 	});
 	
+	addEventListener("mousemove",function(e) {
+		var x = e.pageX;
+		var y = e.pageY;
+		
+		// Create x & y relative to gamepad
+		var rx = x - ox;
+		var ry = y - oy;
+		
+		// Check if gamepad being clicked
+		if ( gamepad != null && (0 < x && x < (ox + 48)) && ((oy - 48) < y && y < canvas.height)) {
+			if(ry < 0 && Math.abs(ry) > Math.abs(rx))
+				gamepad = "up";
+			if(ry > 0 && Math.abs(ry) > Math.abs(rx))
+				gamepad = "down";
+			if(rx > 0 && Math.abs(rx) > Math.abs(ry))
+				gamepad = "right";
+			if(rx < 0 && Math.abs(rx) > Math.abs(ry))
+				gamepad = "left";
+		}
+	});
+	
+	addEventListener("mouseup", function(e) {
+		gamepad = null;
+	});
+	
 	canvas.addEventListener("touchstart", function(e) {
 		
 		e.preventDefault();
@@ -139,10 +164,6 @@ fsg.main = function() {
 		}
 	});
 	
-	addEventListener("mouseup", function(e) {
-		gamepad = null;
-	});
-	
 	canvas.addEventListener("touchend", function(e) {
 		gamepad = null;
 	});
@@ -160,14 +181,12 @@ fsg.main = function() {
 		skipScene = false;
 		game.render();
 		
-		/*
 		// FPS
-		ctx.fillStyle = "rgb(250,250,250)";
-		ctx.font = "18px Helvetica";
+		ctx.fillStyle = "rgb(20,180,180)";
+		ctx.font = "bold 18px Helvetica";
 		ctx.textAlign = "left";
 		ctx.textBaseline = "top";
-		ctx.fillText("FPS: "+(1000/delta).toFixed(2), 96, 0);
-		*/
+		ctx.fillText("FPS:"+(1000/delta).toFixed(2), 96, canvas.height - 32);
 		then = now;
 	}, 1);
 	
