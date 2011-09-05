@@ -19,7 +19,7 @@ fsg.monster = function() {
 	
 	monster.move = function(modifier) {
 		if(this.moveQueue.length == 0) {
-			var random = Math.floor(Math.random()*100) % (8 * Math.floor(1000*modifier));
+			var random = Math.floor(Math.random()*100) % Math.floor(3 / modifier);
 			if(random == 0) {
 				var direction = Math.floor((Math.random()*100)) % 4;
 					switch(direction) {

@@ -132,10 +132,10 @@ fsg.game = function() {
 		
 		for(i in this.monsters) {
 			if (
-					   this.player.x 	 <= (this.monsters[i].x + 32)
-					&& this.monsters[i].x <= (this.player.x + 32)
-					&& this.player.y 	 <= (this.monsters[i].y + 32)
-					&& this.monsters[i].y <= (this.player.y + 32)
+					   this.player.x 	 <= (this.monsters[i].x + 24)
+					&& this.monsters[i].x <= (this.player.x + 24)
+					&& this.player.y 	 <= (this.monsters[i].y + 24)
+					&& this.monsters[i].y <= (this.player.y + 24)
 				) {
 				this.player.health -= 10;
 				if(this.player.health <= 0) {
