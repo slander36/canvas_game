@@ -112,7 +112,7 @@ fsg.game = function() {
 		
 		if (38 == keyDown || gamepad == "up") {
 			this.player.moveUp();
-			this.gamepad.current = this.gamepad.up
+			this.gamepad.current = this.gamepad.up;
 		}
 		if (40 == keyDown || gamepad == "down") {
 			this.player.moveDown();
