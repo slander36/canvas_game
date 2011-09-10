@@ -30,9 +30,9 @@ fsg.main = function() {
 	var ox = 48;
 	var oy = canvas.height - 48;
 	
-	addEventListener("mousedown", function(e) {
-		var x = e.pageX;
-		var y = e.pageY;
+	canvas.addEventListener("mousedown", function(e) {
+		var x = e.offsetX;
+		var y = e.offsetY;
 		
 		// Check if SkipLevel Pressed
 		if((x > (canvas.width-128) && x < canvas.width)
@@ -69,8 +69,8 @@ fsg.main = function() {
 	});
 	
 	addEventListener("mousemove",function(e) {
-		var x = e.pageX;
-		var y = e.pageY;
+		var x = e.offsetX;
+		var y = e.offsetY;
 		
 		// Create x & y relative to gamepad
 		var rx = x - ox;
@@ -101,8 +101,8 @@ fsg.main = function() {
 			
 			var touch = e.touches[i];
 			
-			var x = touch.pageX;
-			var y = touch.pageY;
+			var x = touch.offsetX;
+			var y = touch.offsetX;
 			
 			// Check if SkipLevel Pressed
 			if((x > (canvas.width-128) && x < canvas.width)
@@ -145,8 +145,8 @@ fsg.main = function() {
 		
 			var touch = e.touches[i];
 			
-			var x = touch.pageX;
-			var y = touch.pageY;
+			var x = touch.offsetX;
+			var y = touch.offsetY;
 			
 			// Create x & y relative to gamepad
 			var rx = x - ox;
