@@ -2,6 +2,8 @@ fsg.game = function() {
 
 	this.init = function(canvas, ctx) {
 		
+		var game = this;
+		
 		// Add render devices
 		this.canvas = canvas;
 		this.ctx = ctx;
@@ -54,6 +56,9 @@ fsg.game = function() {
 		this.pauseButton.loadImage('images/pausebutton.png');
 		this.pauseButton.x = this.canvas.width-128;
 		this.pauseButton.y = this.canvas.height-32;
+		this.pauseButton.addEventListner("mousedown", function() {
+			game.isPaused = (game.isPaused == true ? false : true);
+		});
 		
 		this.gamepad = {};
 		
@@ -93,8 +98,9 @@ fsg.game = function() {
 	
 	this.update = function(paused, modifier, keysDown, gamepad, skipScene) {
 		
+		/*
 		this.isPaused = paused;
-		
+		*/
 		if(this.isPaused == true) return;
 		
 		if(skipScene) {

@@ -19,6 +19,8 @@ fsg.actor = function() {
 		this.actorImage.actorReady = false;
 		this.actorImage.onload = function() {
 			this.actorReady = true;
+			this.actor.w = this.width;
+			this.actor.h = this.height;
 		};
 		
 		// movement queue
@@ -31,6 +33,7 @@ fsg.actor = function() {
 	
 	this.loadImage = function(image) {
 		this.actorImage.src = image;
+		this.actorImage.actor = this;
 	};
 	
 	this.moveUp = function() {
@@ -59,6 +62,20 @@ fsg.actor = function() {
 				(  this.scene.getBlockType(this.cx+1,this.cy) == 1
 				|| this.scene.getBlockType(this.cx+1,this.cy) == 99))
 			this.moveQueue.push('right');
+	};
+	
+	this.addEventListner = function(event, callback) {
+		var actor = this;
+		this.scene.canvas.addEventListener(event, function(e) {
+			var x = actor.x;
+			var y = actor.y;
+			var w = actor.w;
+			var h = actor.h;
+			if(e.pageX > x && e.pageX < (x + w) &&
+					e.pageY > y && e.pageY < (y + h)) {
+				callback();
+			}
+		});
 	};
 	
 };

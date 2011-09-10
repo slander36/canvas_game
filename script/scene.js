@@ -2,6 +2,8 @@ fsg.scene = function() {
 	
 	this.init = function(canvas) {
 		
+		this.canvas = canvas;
+		
 		this.dx = canvas.width/32;
 		this.dy = canvas.height/32;
 		

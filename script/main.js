@@ -41,6 +41,7 @@ fsg.main = function() {
 		}
 		
 		// Check if Pause Pressed
+		/*
 		if((x > (canvas.width-128) && x < canvas.width)
 				&& (y > (canvas.height-32) && y < canvas.height)) {
 			if(paused == true)
@@ -48,6 +49,7 @@ fsg.main = function() {
 			else
 				paused = true;
 		}
+		*/
 		
 		// Create x & y relative to gamepad
 		var rx = x - ox;
