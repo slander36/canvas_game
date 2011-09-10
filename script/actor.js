@@ -71,8 +71,8 @@ fsg.actor = function() {
 			var y = actor.y;
 			var w = actor.w;
 			var h = actor.h;
-			if(e.pageX > x && e.pageX < (x + w) &&
-					e.pageY > y && e.pageY < (y + h)) {
+			if(e.offsetX > x && e.offsetX < (x + w) &&
+					e.offsetY > y && e.offsetY < (y + h)) {
 				callback();
 			}
 		});
